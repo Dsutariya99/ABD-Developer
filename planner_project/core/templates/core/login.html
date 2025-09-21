@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="auth-container fade-in">
+    <div class="auth-card">
+        <h2 class="auth-title">
+            {% if page == 'login' %}Welcome Back{% else %}Create Account{% endif %}
+        </h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="glowing-btn">
+                {% if page == 'login' %}Login{% else %}Sign Up{% endif %}
+            </button>
+        </form>
+        <p class="auth-switch">
+            {% if page == 'login' %}
+                Don't have an account? <a href="{% url 'signup' %}">Sign Up</a>
+            {% else %}
+                Already have an account? <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+        </p>
+    </div>
+</div>
+{% endblock %}

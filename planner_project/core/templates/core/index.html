@@ -1,0 +1,77 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="content-wrapper">
+    <section class="planner-form-section slide-up">
+        <div class="card">
+            <h2>Let's Plan Your Next Adventure</h2>
+            <p>Tell us your travel dreams, and our AI will craft the perfect itinerary.</p>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="destination">Destination</label>
+                        <input type="text" name="destination" placeholder="e.g., Kyoto, Japan" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="days">How many days?</label>
+                        <input type="number" name="days" placeholder="e.g., 7" required>
+                    </div>
+                    <div class="form-group form-group-full">
+                        <label for="interests">What are your interests?</label>
+                        <input type="text" name="interests" placeholder="e.g., Ancient temples, sushi, hiking, technology" required>
+                    </div>
+                </div>
+                <button type="submit" class="glowing-btn">✨ Generate Itinerary</button>
+            </form>
+        </div>
+    </section>
+
+    {% if itinerary or recommendations %}
+    <div class="results-container slide-up" style="animation-delay: 0.2s;">
+        <h2 class="results-header">Your Personalized Plan for {{ destination }}</h2>
+        
+        {% if itinerary %}
+        <section class="itinerary-section">
+            <h3>Daily Itinerary</h3>
+            <div class="timeline">
+                {% for day in itinerary %}
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content card">
+                        <h4>Day {{ day.day }}: {{ day.title }}</h4>
+                        <p>{{ day.activities }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% if recommendations %}
+        <section class="recommendations-section">
+            <h3>Local Recommendations</h3>
+            <div class="reco-grid">
+                <div class="card">
+                    <h5>🍽️ Must-Try Restaurants</h5>
+                    <ul>
+                        {% for item in recommendations.restaurants %}
+                        <li><strong>{{ item.name }}:</strong> {{ item.description }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="card">
+                    <h5>🌲 Unique Activities</h5>
+                    <ul>
+                        {% for item in recommendations.activities %}
+                        <li><strong>{{ item.name }}:</strong> {{ item.description }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
